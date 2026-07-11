@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гитары и Лимонад — Fedot Mag Music</title>
+<meta name="description" content="Спокойная инструментальная музыка. Гитара, бас, атмосфера. Без слов. Fedot Mag Music.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0e0e0d;
+  --bg2: #141413;
+  --bg3: #1c1c1a;
+  --gold: #c9a96e;
+  --gold-dim: #8a7050;
+  --text: #e8e4dc;
+  --text-dim: #9a9690;
+  --text-muted: #555450;
+  --border: rgba(201,169,110,0.18);
+  --border-dim: rgba(255,255,255,0.07);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.brand-label {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 40px;
+}
+
+.hero-title {
+  font-size: clamp(48px, 11vw, 100px);
+  font-weight: 200;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.hero-title span { color: var(--gold); }
+
+.hero-sub {
+  font-size: clamp(13px, 2vw, 17px);
+  font-weight: 300;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 52px;
+}
+
+.divider {
+  width: 36px;
+  height: 1px;
+  background: var(--gold-dim);
+  margin: 0 auto 48px;
+  opacity: 0.45;
+}
+
+.hero-desc {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 400px;
+  margin: 0 auto 60px;
+  line-height: 1.85;
+}
+
+.scroll-hint {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: pulse 2.5s ease infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 28px;
+  background: var(--gold-dim);
+  opacity: 0.4;
+}
+@keyframes pulse {
+  0%,100% { opacity:0.4; transform:translateY(0); }
+  50% { opacity:0.9; transform:translateY(5px); }
+}
+
+.player-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border-dim);
+  border-bottom: 1px solid var(--border-dim);
+  padding: 72px 0;
+}
+.inner {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 36px;
+}
+
+.album-header {
+  font-size: 26px;
+  font-weight: 200;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.album-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+
+.track-list { list-style: none; border-top: 1px solid var(--border-dim); }
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-dim);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.track:hover .track-name-ru { color: var(--gold); }
+.track.active .track-name-ru { color: var(--gold); }
+
+.track-num {
+  font-size: 11px;
+  color: var(--text-muted);
+  width: 18px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.track-play-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-dim);
+  background: transparent;
+  color: var(--gold-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
+  font-size: 9px;
+  padding-left: 2px;
+}
+.track-play-btn:hover, .track-play-btn.playing {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.track-names { flex: 1; min-width: 0; }
+.track-name-ru {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-dim);
+  transition: color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.track-name-en {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-dur {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.main-player {
+  margin-top: 36px;
+  padding: 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border-dim);
+  border-radius: 3px;
+}
+.now-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.now-title {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text);
+  margin-bottom: 20px;
+  min-height: 24px;
+}
+.now-title span { color: var(--gold); font-size: 13px; margin-left: 6px; font-weight: 300; }
+
+.progress-bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 1px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--gold-dim);
+  border-radius: 1px;
+  width: 0%;
+  transition: width 0.25s linear;
+}
+.time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ctrl-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+.ctrl-btn:hover { color: var(--gold); }
+.ctrl-btn.main-play {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  justify-content: center;
+  padding-left: 3px;
+  color: var(--gold);
+}
+.ctrl-btn.main-play:hover { border-color: var(--gold); background: rgba(201,169,110,0.07); }
+
+.vol-row {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vol-icon { font-size: 13px; color: var(--text-muted); }
+input[type=range].vol {
+  -webkit-appearance: none;
+  width: 70px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  border-radius: 1px;
+  cursor: pointer;
+}
+input[type=range].vol::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  cursor: pointer;
+}
+
+.about-section {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+.about-text {
+  font-size: clamp(17px, 2.8vw, 22px);
+  font-weight: 200;
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+.about-text em { color: var(--gold); font-style: normal; }
+
+.buy-wrap {
+  background: var(--bg2);
+  border-top: 1px solid var(--border-dim);
+  border-bottom: 1px solid var(--border-dim);
+  padding: 72px 0;
+}
+.buy-inner {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.buy-card {
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 48px 40px;
+  text-align: center;
+}
+.buy-title {
+  font-size: 28px;
+  font-weight: 200;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.buy-price {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--gold);
+  margin-bottom: 36px;
+}
+.buy-features {
+  list-style: none;
+  margin-bottom: 40px;
+  display: inline-block;
+  text-align: left;
+}
+.buy-features li {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-dim);
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.buy-features li::before {
+  content: '—';
+  color: var(--gold-dim);
+  font-size: 10px;
+}
+.btn-tg {
+  display: inline-block;
+  padding: 13px 34px;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-tg:hover { background: rgba(201,169,110,0.07); border-color: var(--gold); }
+.free-note { font-size: 12px; color: var(--text-muted); margin-top: 20px; }
+
+footer {
+  padding: 48px 24px;
+  text-align: center;
+  border-top: 1px solid var(--border-dim);
+}
+.footer-brand { font-size: 16px; font-weight: 200; color: var(--text-dim); margin-bottom: 8px; letter-spacing: 0.06em; }
+.footer-copy { font-size: 12px; color: var(--text-muted); }
+.footer-copy a { color: var(--gold-dim); text-decoration: none; }
+
+audio { display: none; }
+
+@media(max-width:480px){
+  .buy-card { padding: 32px 20px; }
+  .vol-row { display: none; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <p class="brand-label">Fedot Mag Music</p>
+  <h1 class="hero-title">Гитары и <span>Лимонад</span></h1>
+  <p class="hero-sub">Guitars &amp; Lemonade</p>
+  <div class="divider"></div>
+  <p class="hero-desc">Спокойная музыка без слов. Гитара, бас, атмосфера.<br>Для вечера — и для любого момента, когда нужно притормозить.</p>
+  <div class="scroll-hint">слушать</div>
+</section>
+
+<div class="player-section">
+  <div class="inner">
+    <p class="section-label">✦ Альбом · 16 треков · 52 мин</p>
+    <p class="album-header">Guitars &amp; Lemonade</p>
+    <p class="album-meta">Fedot Mag Music · 2024 · Инструментальная музыка</p>
+
+    <ul class="track-list" id="trackList"></ul>
+
+    <div class="main-player">
+      <p class="now-label">сейчас играет</p>
+      <p class="now-title" id="nowTitle">Выбери трек</p>
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="time-row">
+        <span id="curTime">0:00</span>
+        <span id="totTime">—:——</span>
+      </div>
+      <div class="controls">
+        <button class="ctrl-btn" id="prevBtn">&#9664;&#9664;</button>
+        <button class="ctrl-btn main-play" id="playBtn">&#9654;</button>
+        <button class="ctrl-btn" id="nextBtn">&#9654;&#9654;</button>
+        <div class="vol-row">
+          <span class="vol-icon">♪</span>
+          <input type="range" class="vol" id="volSlider" min="0" max="1" step="0.01" value="0.8">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="about-section">
+  <p class="section-label">✦ Об альбоме</p>
+  <p class="about-text">
+    Эту музыку я делаю для себя — именно такой, какой она мне нравится.<br><br>
+    <em>Спокойная, без слов.</em> Где-то между чиллом и чем-то чуть глубже. Гитара, бас, атмосфера. Без суеты.<br><br>
+    Подумал — вдруг кому-то тоже зайдёт.
+  </p>
+</div>
+
+<div class="buy-wrap">
+  <div class="buy-inner">
+    <p class="section-label">✦ Забрать с собой</p>
+    <div class="buy-card">
+      <p class="buy-title">Весь альбом — MP3</p>
+      <p class="buy-price">$10 · раз и навсегда</p>
+      <ul class="buy-features">
+        <li>Все 16 треков в формате MP3</li>
+        <li>Слушай без интернета</li>
+        <li>Поддержишь новые работы</li>
+      </ul>
+      <a class="btn-tg" href="https://t.me/GrifRift555?text=Хочу купить альбом Гитары и Лимонад за $10 в MP3" target="_blank">
+        Написать в Telegram — @GrifRift555
+      </a>
+      <p class="free-note">Слушать онлайн — всегда бесплатно</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p class="footer-brand">Fedot Mag Music</p>
+  <p class="footer-copy">Guitars &amp; Lemonade · 2024 · <a href="https://t.me/GrifRift555">@GrifRift555</a></p>
+</footer>
+
+<audio id="audioPlayer" preload="none"></audio>
+
+<script>
+const tracks = [
+  { num:"01", ru:"Стеклянный рассвет",   en:"Glassy Sunrise",         src:"audio/01_Glassy_Sunrise.mp3",          dur:"2:59" },
+  { num:"02", ru:"Бархатное тепло",       en:"Velvet Register Heat",   src:"audio/02_Velvet_Register_Heat.mp3",    dur:"3:18" },
+  { num:"03", ru:"Шафрановый дрейф",      en:"Saffron Doppler",        src:"audio/03_Saffron_Doppler.mp3",         dur:"3:08" },
+  { num:"04", ru:"Солёный ветер",         en:"Saltwind Halo",          src:"audio/04_Saltwind_Halo.mp3",           dur:"3:09" },
+  { num:"05", ru:"Виниловый вечер",       en:"Vinyl Census",           src:"audio/05_Vinyl_Census.mp3",            dur:"2:32" },
+  { num:"06", ru:"Зерно единства",        en:"Unity Grain",            src:"audio/06_Unity_Grain.mp3",             dur:"2:34" },
+  { num:"07", ru:"Монастырская любовь",   en:"Vinyl Monastery Love",   src:"audio/07_Vinyl_Monastery_Love.mp3",    dur:"3:59" },
+  { num:"08", ru:"Ибица и лимонад",       en:"Ibiza Lemonade",         src:"audio/08_Ibiza_Lemonade.mp3",          dur:"3:19" },
+  { num:"09", ru:"Ониксовое стекло",      en:"Onyx Saltglass",         src:"audio/09_Onyx_Saltglass.mp3",          dur:"3:44" },
+  { num:"10", ru:"Водная мозаика",        en:"Agua Jigsaw",            src:"audio/10_Agua_Jigsaw.mp3",             dur:"3:22" },
+  { num:"11", ru:"Лавандовая плёнка",     en:"Tape Lavender",          src:"audio/11_Tape_Lavender.mp3",           dur:"2:27" },
+  { num:"12", ru:"Шафрановый контур",     en:"Saffron Circuit",        src:"audio/12_Saffron_Circuit.mp3",         dur:"3:14" },
+  { num:"13", ru:"Рассвет в стекле",      en:"Glassy Sunrise Alt",     src:"audio/13_Glassy_Sunrise_Alt.mp3",      dur:"3:13" },
+  { num:"14", ru:"Солёный метроном",      en:"Saltwater Metronome",    src:"audio/14_Saltwater_Metronome.mp3",     dur:"4:09" },
+  { num:"15", ru:"Солёный метроном v2",   en:"Saltwater Metronome v2", src:"audio/15_Saltwater_Metronome_v2.mp3",  dur:"4:09" },
+  { num:"16", ru:"Молитва прилива",       en:"Tideglass Prayer",       src:"audio/16_Tideglass_Prayer.mp3",        dur:"3:34" },
+];
+
+const audio = document.getElementById('audioPlayer');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressFill = document.getElementById('progressFill');
+const progressBar = document.getElementById('progressBar');
+const curTimeEl = document.getElementById('curTime');
+const totTimeEl = document.getElementById('totTime');
+const nowTitle = document.getElementById('nowTitle');
+const volSlider = document.getElementById('volSlider');
+const list = document.getElementById('trackList');
+
+let cur = -1, playing = false;
+
+function fmt(s) {
+  if (isNaN(s)) return '—:——';
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m + ':' + (sec<10?'0':'') + sec;
+}
+
+tracks.forEach((t, i) => {
+  const li = document.createElement('li');
+  li.className = 'track';
+  li.dataset.index = i;
+  li.innerHTML = `
+    <span class="track-num">${t.num}</span>
+    <button class="track-play-btn" aria-label="Воспроизвести">&#9654;</button>
+    <div class="track-names">
+      <div class="track-name-ru">${t.ru}</div>
+      <div class="track-name-en">${t.en}</div>
+    </div>
+    <span class="track-dur">${t.dur}</span>
+  `;
+  li.querySelector('.track-play-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    if (cur === i && playing) { pause(); } else { load(i, true); }
+  });
+  li.addEventListener('click', () => load(i, true));
+  list.appendChild(li);
+});
+
+function load(idx, play) {
+  cur = idx;
+  const t = tracks[idx];
+  audio.src = t.src;
+  nowTitle.innerHTML = t.ru + '<span>' + t.en + '</span>';
+  progressFill.style.width = '0%';
+  curTimeEl.textContent = '0:00';
+  totTimeEl.textContent = t.dur;
+  document.querySelectorAll('.track').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+    el.querySelector('.track-play-btn').innerHTML = (i === idx && play) ? '&#10074;&#10074;' : '&#9654;';
+  });
+  if (play) {
+    audio.play().then(() => { playing = true; playBtn.innerHTML = '&#10074;&#10074;'; }).catch(()=>{});
+  }
+}
+
+function pause() {
+  audio.pause(); playing = false;
+  playBtn.innerHTML = '&#9654;';
+  if (cur >= 0) document.querySelectorAll('.track')[cur].querySelector('.track-play-btn').innerHTML = '&#9654;';
+}
+
+playBtn.addEventListener('click', () => {
+  if (cur === -1) { load(0, true); return; }
+  if (playing) { pause(); }
+  else { audio.play().then(() => { playing = true; playBtn.innerHTML = '&#10074;&#10074;';
+    document.querySelectorAll('.track')[cur].querySelector('.track-play-btn').innerHTML = '&#10074;&#10074;';
+  }).catch(()=>{}); }
+});
+
+prevBtn.addEventListener('click', () => { if (cur > 0) load(cur-1, playing); });
+nextBtn.addEventListener('click', () => { if (cur < tracks.length-1) load(cur+1, playing); });
+
+audio.addEventListener('timeupdate', () => {
+  if (audio.duration) {
+    progressFill.style.width = (audio.currentTime/audio.duration*100)+'%';
+    curTimeEl.textContent = fmt(audio.currentTime);
+  }
+});
+audio.addEventListener('loadedmetadata', () => { totTimeEl.textContent = fmt(audio.duration); });
+audio.addEventListener('ended', () => {
+  if (cur < tracks.length-1) load(cur+1, true);
+  else { playing = false; playBtn.innerHTML = '&#9654;'; }
+});
+
+progressBar.addEventListener('click', e => {
+  if (!audio.duration) return;
+  const r = progressBar.getBoundingClientRect();
+  audio.currentTime = ((e.clientX-r.left)/r.width)*audio.duration;
+});
+
+volSlider.addEventListener('input', () => { audio.volume = volSlider.value; });
+audio.volume = 0.8;
+</script>
+</body>
+</html>
